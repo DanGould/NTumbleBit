@@ -24,8 +24,9 @@ namespace NTumbleBit.ClassicTumbler.Client.ConnectionSettings
 		public static TorConnectionSettings ParseConnectionSettings(string prefix, TextFileConfiguration config)
 		{
 			TorConnectionSettings settings = new TorConnectionSettings();
-			settings.Server = config.GetOrDefault<IPEndPoint>(prefix + ".server", new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9051));
-			settings.Password = config.GetOrDefault<string>(prefix + ".password", null);
+            var torServerUri = config.GetOrDefault<string>(prefix + ".server", "127.0.0.1:9051");
+            settings.Server = new IPEndPoint(Dns.GetHostAddresses(torServerUri)[0], 9051);
+            settings.Password = config.GetOrDefault<string>(prefix + ".password", null);
 			settings.CookieFile = config.GetOrDefault<string>(prefix + ".cookiefile", null);
 			settings.VirtualPort = config.GetOrDefault<int>(prefix + ".virtualport", 80);
 			return settings;
